@@ -300,7 +300,7 @@ export async function voteReport(reportId, userId, voteType) {
   const currentVote = report.votedUsers[userId];
 
   if (currentVote === voteType) {
-    // Undo vote if clicking same button
+
     delete report.votedUsers[userId];
     if (voteType === 'up') report.upvotes = Math.max(0, report.upvotes - 1);
     if (voteType === 'down') report.downvotes = Math.max(0, report.downvotes - 1);

@@ -29,7 +29,7 @@ export default function OfficerDashboard() {
   const [reports, setReports] = useState([]);
   const [reportsLoading, setReportsLoading] = useState(true);
 
-  const [tab, setTab] = useState('pending'); // pending | assigned | resolved
+  const [tab, setTab] = useState('pending');
   const [processingId, setProcessingId] = useState(null);
   const [successMsg, setSuccessMsg] = useState('');
 
