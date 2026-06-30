@@ -24,36 +24,33 @@ export default function ReportIssue() {
   const [image, setImage] = useState(null); // stores blob URL
   const [imageFile, setImageFile] = useState(null);
   
-  // AI/Gemini States
-  const [aiAnalyzing, setAiAnalyzing] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
   const [severity, setSeverity] = useState('Low');
   const [priorityScore, setPriorityScore] = useState(20);
-  const [aiSummary, setAiSummary] = useState('');
+  const [assessmentSummary, setAssessmentSummary] = useState('');
   
   // Interaction States
   const [dragActive, setDragActive] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  // Trigger Gemini Analysis
-  const handleAiAnalysis = async () => {
+  const handleReportAnalysis = async () => {
     if (!description.trim() || description.length < 10) return;
     
-    setAiAnalyzing(true);
+    setAnalyzing(true);
     try {
       const res = await analyzeReport(title || 'Untitled Issue', description);
       
-      // Update form and preview states based on AI categorization
       if (res.category && CATEGORIES.includes(res.category)) {
         setCategory(res.category);
       }
       setSeverity(res.severity || 'Low');
       setPriorityScore(res.priorityScore || 20);
-      setAiSummary(res.summary || '');
+      setAssessmentSummary(res.summary || '');
     } catch (error) {
-      console.error("AI Analysis failed:", error);
+      console.error("Report analysis failed:", error);
     } finally {
-      setAiAnalyzing(false);
+      setAnalyzing(false);
     }
   };
 
@@ -146,14 +143,14 @@ export default function ReportIssue() {
         <div className="space-y-2">
           <h1 className="text-2xl font-extrabold text-white tracking-tight">Report Submitted!</h1>
           <p className="text-slate-400 text-sm">
-            Thank you! Your report has been analyzed by Gemini AI and queued for verification. A municipal officer will inspect the issue shortly.
+            Thank you! Your report has been reviewed and queued for verification. A municipal officer will inspect the issue shortly.
           </p>
         </div>
         <div className="p-4 bg-slate-900/50 border border-slate-800 rounded-2xl text-left w-full text-xs text-slate-350 space-y-1">
           <span className="block font-bold text-white mb-1">🎫 Report Receipt Details</span>
           <div><span className="font-bold text-slate-400">Issue:</span> {title}</div>
           <div><span className="font-bold text-slate-400">Category:</span> {category}</div>
-          <div><span className="font-bold text-slate-400">AI Priority Score:</span> {priorityScore}/100 ({severity})</div>
+          <div><span className="font-bold text-slate-400">Priority Score:</span> {priorityScore}/100 ({severity})</div>
           <div><span className="font-bold text-slate-400">XP Reward:</span> +50 XP (Pending resolution)</div>
         </div>
         <button
@@ -211,7 +208,7 @@ export default function ReportIssue() {
             />
           </div>
 
-          {/* Description (Triggers AI classification onBlur) */}
+          {/* Description */}
           <div className="space-y-1.5">
             <div className="flex justify-between items-center">
               <label htmlFor="issue-desc" className="block text-xs font-bold text-slate-400 uppercase tracking-wide">
@@ -220,19 +217,19 @@ export default function ReportIssue() {
               {description.trim().length >= 10 && (
                 <button
                   type="button"
-                  onClick={handleAiAnalysis}
-                  disabled={aiAnalyzing}
+                  onClick={handleReportAnalysis}
+                  disabled={analyzing}
                   className="text-[10px] font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1 cursor-pointer transition-colors"
                 >
-                  {aiAnalyzing ? (
+                  {analyzing ? (
                     <>
                       <Loader className="w-3 h-3 animate-spin" />
-                      <span>AI Analyzing...</span>
+                      <span>Analyzing...</span>
                     </>
                   ) : (
                     <>
                       <Sparkles className="w-3 h-3 text-blue-400 animate-pulse" />
-                      <span>Gemini Auto-Sort</span>
+                      <span>Auto-Sort Priority</span>
                     </>
                   )}
                 </button>
@@ -242,10 +239,10 @@ export default function ReportIssue() {
               id="issue-desc"
               required
               rows="4"
-              placeholder="Provide details of the problem. (Tip: When you finish typing, Gemini will automatically classify and priority-sort the report!)"
+              placeholder="Provide details of the problem. When you finish typing, the report will be categorized and priority-sorted automatically."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              onBlur={handleAiAnalysis}
+              onBlur={handleReportAnalysis}
               className="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-slate-200 text-sm placeholder-slate-500 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors resize-none"
             />
           </div>
@@ -363,11 +360,10 @@ export default function ReportIssue() {
               <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Live Report Preview</h2>
             </div>
             
-            {/* AI analyzing indicator */}
-            {aiAnalyzing && (
+            {analyzing && (
               <span className="text-[10px] text-blue-400 font-bold flex items-center gap-1 animate-pulse">
                 <Loader className="w-3 h-3 animate-spin" />
-                <span>AI Categorizing...</span>
+                <span>Categorizing...</span>
               </span>
             )}
           </div>
@@ -420,7 +416,7 @@ export default function ReportIssue() {
                   {title || 'Untargeted Civic Incident'}
                 </h3>
                 <p className="text-slate-400 text-xs line-clamp-3 leading-relaxed">
-                  {description || 'Provide details inside the description box on the left. Gemini will automatically extract the category, assess safety severity, and calculate priority scores.'}
+                  {description || 'Provide details inside the description box on the left. The system will extract the category, assess safety severity, and calculate priority scores.'}
                 </p>
               </div>
 
@@ -430,7 +426,7 @@ export default function ReportIssue() {
                   <span className="truncate">{location || 'Pending Location details...'}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400 font-semibold">Gemini Priority Score:</span>
+                  <span className="text-slate-400 font-semibold">Priority Score:</span>
                   <span className={`font-bold ${
                     priorityScore >= 80 ? 'text-rose-450' : 
                     priorityScore >= 60 ? 'text-amber-450' : 
@@ -442,11 +438,10 @@ export default function ReportIssue() {
 
           </div>
 
-          {/* AI Explanation Banner */}
-          {aiSummary && (
+          {assessmentSummary && (
             <div className="p-4 rounded-2xl bg-blue-950/20 border border-blue-500/10 text-[10px] text-slate-400 leading-relaxed animate-fade-in">
-              <span className="font-bold text-blue-400 block mb-0.5">🧠 Gemini AI Assessment Summary</span>
-              {aiSummary}
+              <span className="font-bold text-blue-400 block mb-0.5">Assessment Summary</span>
+              {assessmentSummary}
             </div>
           )}
         </div>

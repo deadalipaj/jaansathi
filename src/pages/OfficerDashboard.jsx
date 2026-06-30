@@ -262,13 +262,13 @@ export default function OfficerDashboard() {
       <section className="space-y-4">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
           <div>
-            <h2 className="text-lg font-bold text-white tracking-tight">Gemini Priority Queue</h2>
+            <h2 className="text-lg font-bold text-white tracking-tight">Priority Queue</h2>
             <p className="text-slate-400 text-xs mt-0.5">
-              Reports are auto-ranked by Gemini priority score (highest risk first).
+              Reports are auto-ranked by priority score (highest risk first).
             </p>
           </div>
           <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest bg-blue-500/5 px-3 py-1 rounded-lg border border-blue-500/10">
-            🤖 Gemini Auto-Sorted
+            Auto-Sorted
           </span>
         </div>
 

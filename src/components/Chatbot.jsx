@@ -44,7 +44,7 @@ export default function Chatbot() {
     setThinking(true);
 
     try {
-      // Gather chat history to send to Gemini
+      // Gather chat history for the assistant
       // Format: Array of { role: 'user'|'model', text: '...' }
       const history = [...messages, userMessage].map(m => ({
         role: m.role,
@@ -87,7 +87,7 @@ export default function Chatbot() {
                 <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#0c101b] animate-pulse" />
               </div>
               <div className="text-left">
-                <span className="block text-xs font-bold text-white leading-none">Jaan Sathi AI</span>
+                <span className="block text-xs font-bold text-white leading-none">Jaan Sathi Assistant</span>
                 <span className="text-[9px] text-slate-400 font-semibold mt-1 block leading-none">Online • 24/7 Civic Assistant</span>
               </div>
             </div>
@@ -159,7 +159,7 @@ export default function Chatbot() {
       {/* --- FLOATING CHAT BUTTON --- */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="Open AI Assistant"
+        aria-label="Open assistant"
         className={`p-4 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:scale-105 shadow-xl transition-all cursor-pointer relative group ${
           isOpen ? 'rotate-90 bg-slate-800' : ''
         }`}

@@ -17,7 +17,7 @@ export default function App() {
         {/* Responsive Dashboard Sidebar */}
         <Sidebar />
 
-        {/* Floating AI Assistant Chatbot */}
+        {/* Help assistant */}
         <Chatbot />
 
         {/* Main Content Area */}
